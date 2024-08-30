@@ -1,0 +1,10 @@
+{
+    "manifest_version": 1,
+    "name": "BrowserPad",
+    "version": "1.0",
+    "description": "A text editor in new tabs with save functionality",
+    "permissions": ["tabs", "downloads", "storage"],
+    "chrome_url_overrides": {
+      "newtab": "newtab.html"
+    }
+}
