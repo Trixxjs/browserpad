@@ -7,19 +7,22 @@
       font-family: 'Courier New', Courier, monospace;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       height: 100vh;
       margin: 0;
       background-color: #282c34; /* Dark background */
       color: #abb2bf; /* Light text color */
+      flex-direction: column;
     }
     .editor-container {
       display: flex;
-      width: 80%;
-      height: 80%;
+      width: 100%;
+      height: 90%;
       background-color: #2c2c2c; /* Dark background for the editor container */
       border-radius: 5px;
       position: relative; /* To position the button */
+      flex: 1;
+      flex-direction: row;
     }
     #line-numbers {
       background-color: #2c2c2c; /* Dark background for line numbers */
@@ -74,13 +77,66 @@
     #save-button:hover {
       background-color: #528bff; /* Darker shade on hover */
     }
+    .tabs {
+      display: flex;
+      justify-content: flex-start;
+      background-color: #333; /* Dark background for tabs */
+      padding: 10px;
+      border-radius: 5px 5px 0 0;
+      height: 30px;
+      align-self:first baseline;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #444; /* Inactive tab background */
+      color: #fff;
+      border-radius: 5px 5px 0 0;
+      margin-right: 10px;
+    }
+    .tab.active {
+      background-color: #61afef; /* Active tab background */
+    }
+
+    .epoch-converter {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .epoch-converter input {
+      margin-bottom: 10px;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
-  <div class="editor-container">
+  <div class="tabs">
+    <div class="tab active" id="tab-editor">Editor</div>
+    <div class="tab" id="tab-epoch">Epoch converter</div>
+    <div class="tab" id="tab-diff">JSON diff</div>
+    <div class="tab" id="tab-beautify">JSON beautify</div>
+    <div class="tab" id="tab-about">About</div>
+  </div>
+  <div class="editor-container active" id="tab-editor">
     <div id="line-numbers"></div>
     <textarea id="editor" placeholder="Start typing here..."></textarea>
     <button id="save-button">Save</button>
+  </div id="epoch-container">
+  </div>
+  <!-- <div class="epoch-converter" id="epoch-converter">
+    <label for="epoch">Enter Epoch Time:</label>
+    <input type="number" id="epoch-input" placeholder="Enter epoch time">
+    <button id="convert-to-datetime" onclick="convertToDateTime()">Convert to Datetime</button>
+    <p id="datetime-output"></p>
+
+    <label for="datetime">Enter Datetime:</label>
+    <input type="datetime-local" id="datetime-input">
+    <button id="convert-to-epoch" onclick="convertToEpoch">Convert to Epoch</button>
+    <p id="epoch-output"></p>
+  </div>
+  </div>
+  <div> -->
   </div>
   <script src="newtab.js"></script>
 </body>

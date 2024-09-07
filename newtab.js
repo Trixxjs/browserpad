@@ -3,6 +3,47 @@ document.addEventListener('DOMContentLoaded', function() {
   var lineNumbers = document.getElementById('line-numbers');
   var saveButton = document.getElementById('save-button');
 
+    // Tabs
+    var editorTab = document.getElementById('tab-editor');
+    var epochTab = document.getElementById('tab-epoch');
+    var diffTab = document.getElementById('tab-diff');
+    var beautifyTab = document.getElementById('tab-beautify');
+    var aboutTab = document.getElementById('tab-about');
+    
+    var editorContainer = document.getElementById('editor-container');
+    var epochContainer = document.getElementById('settings-container');
+    var diffContainer = document.getElementById('diff-container');
+    var beautifyContainer = document.getElementById('beautify-container');
+    var aboutContainer = document.getElementById('about-container');
+  
+    function switchTab(activeTab, activeContainer) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.content-pane').forEach(pane => pane.style.display = 'none');
+      
+      activeTab.classList.add('active');
+      activeContainer.style.display = 'block';
+    }
+  
+    editorTab.addEventListener('click', function() {
+      switchTab(editorTab, editorContainer);
+    });
+  
+    epochTab.addEventListener('click', function() {
+      switchTab(epochTab, epochContainer);
+    });
+  
+    diffTab.addEventListener('click', function() {
+      switchTab(diffTab, diffContainer);
+    });
+
+    beautifyTab.addEventListener('click', function() {
+      switchTab(beautifyTab, beautifyContainer);
+    });
+
+    aboutTab.addEventListener('click', function() {
+      switchTab(aboutTab, aboutContainer);
+    });
+
   // Function to update line numbers
   function updateLineNumbers() {
     const lines = editor.value.split('\n').length;
@@ -80,4 +121,21 @@ document.addEventListener('DOMContentLoaded', function() {
   editor.addEventListener('input', function() {
     chrome.storage.local.set({ editorContent: editor.value });
   });
+
+  // Function to convert Epoch to DateTime
+function convertToDateTime() {
+  const epochInput = document.getElementById('epoch-input').value;
+  const date = new Date(parseInt(epochInput) * 1000);
+  document.getElementById('epoch-output').innerText = date.toString();
+}
+
+// Function to convert DateTime to Epoch
+function convertToEpoch() {
+  const datetimeInput = document.getElementById('datetime-input').value;
+  const date = new Date(datetimeInput);
+  const epoch = Math.floor(date.getTime() / 1000);
+  document.getElementById('datetime-output').innerText = epoch;
+}
 });
+
+
