@@ -1,72 +1,101 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>New Tab Text Editor</title>
   <style>
     body {
       font-family: 'Courier New', Courier, monospace;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: flex-start;
       height: 100vh;
       margin: 0;
-      background-color: #282c34; /* Dark background */
-      color: #abb2bf; /* Light text color */
+      background-color: #282c34;
+      /* Dark background */
+      color: #abb2bf;
+      /* Light text color */
       flex-direction: column;
     }
+
     .editor-container {
       display: flex;
       width: 100%;
-      height: 90%;
-      background-color: #2c2c2c; /* Dark background for the editor container */
+      height: 100%;
+      background-color: #2c2c2c;
+      /* Dark background for the editor container */
       border-radius: 5px;
-      position: relative; /* To position the button */
-      flex: 1;
+      position: relative;
+      /* To position the button */
       flex-direction: row;
+      margin-top: 60px;
     }
+
     #line-numbers {
-      background-color: #2c2c2c; /* Dark background for line numbers */
-      color: #e5e5e5; /* Light text color */
+      background-color: #2c2c2c;
+      /* Dark background for line numbers */
+      color: #e5e5e5;
+      /* Light text color */
       width: 40px;
       padding: 10px;
-      border-radius: 5px 0 0 5px;
       font-size: 14px;
-      overflow: hidden;
       text-align: right;
-      line-height: 1.5; /* Ensure this matches the editor's line-height */
-      white-space: nowrap; /* Prevent line numbers from wrapping */
+      line-height: 1.5;
+      /* Ensure this matches the editor's line-height */
+      white-space: nowrap;
+      /* Prevent line numbers from wrapping */
     }
+
     #editor {
       flex: 1;
       padding: 10px;
-      font-size: 14px; /* Font size similar to Sublime Text */
+      font-size: 14px;
+      /* Font size similar to Sublime Text */
       border: none;
       border-radius: 0 5px 5px 0;
-      resize: none; /* Disable resizing */
-      background-color: #2c2c2c; /* Dark editor background */
-      color: #e5e5e5; /* Light text color */
-      overflow-y: scroll; /* Enable scrolling if content exceeds */
-      outline: none; /* Remove default outline */
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Subtle inner shadow */
-      line-height: 1.5; /* Improve line spacing */
+      resize: none;
+      /* Disable resizing */
+      background-color: #2c2c2c;
+      /* Dark editor background */
+      color: #e5e5e5;
+      /* Light text color */
+      overflow-y: scroll;
+      /* Enable scrolling if content exceeds */
+      outline: none;
+      /* Remove default outline */
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+      /* Subtle inner shadow */
+      line-height: 1.5;
+      /* Improve line spacing */
     }
+
     #editor::-webkit-scrollbar {
-      width: 12px; /* Scrollbar width */
+      width: 12px;
+      /* Scrollbar width */
     }
+
     #editor::-webkit-scrollbar-thumb {
-      background-color: #444; /* Scrollbar color */
-      border-radius: 6px; /* Rounded scrollbar thumb */
+      background-color: #444;
+      /* Scrollbar color */
+      border-radius: 6px;
+      /* Rounded scrollbar thumb */
     }
+
     #editor::-webkit-scrollbar-track {
-      background-color: #333; /* Scrollbar track color */
-      border-radius: 6px; /* Rounded scrollbar track */
+      background-color: #333;
+      /* Scrollbar track color */
+      border-radius: 6px;
+      /* Rounded scrollbar track */
     }
+
     #save-button {
       position: absolute;
       top: 20px;
       right: 20px;
-      background-color: #61afef; /* Button color */
-      color: #fff; /* Text color */
+      background-color: #61afef;
+      /* Button color */
+      color: #fff;
+      /* Text color */
       border: none;
       border-radius: 5px;
       padding: 8px 16px;
@@ -74,42 +103,57 @@
       font-size: 14px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
+
     #save-button:hover {
-      background-color: #528bff; /* Darker shade on hover */
+      background-color: #528bff;
+      /* Darker shade on hover */
     }
+
     .tabs {
       display: flex;
       justify-content: flex-start;
-      background-color: #333; /* Dark background for tabs */
+      background-color: #333;
+      /* Dark background for tabs */
       padding: 10px;
       border-radius: 5px 5px 0 0;
       height: 30px;
-      align-self:first baseline;
+      align-self: first baseline;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      /* Ensure it stays above other content */
+
     }
+
     .tab {
       padding: 10px 20px;
       cursor: pointer;
-      background-color: #444; /* Inactive tab background */
+      background-color: #444;
+      /* Inactive tab background */
       color: #fff;
       border-radius: 5px 5px 0 0;
       margin-right: 10px;
     }
+
     .tab.active {
-      background-color: #61afef; /* Active tab background */
+      background-color: #61afef;
+      /* Active tab background */
     }
 
-    .epoch-converter {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+    .epoch-converter, .json-beautify {
+      display: none;
+      margin-left: 20px;
+      margin-top: 100px;
     }
 
-    .epoch-converter input {
+    .epoch-converter input, .json-beautify input {
       margin-bottom: 10px;
       padding: 5px;
     }
   </style>
 </head>
+
 <body>
   <div class="tabs">
     <div class="tab active" id="tab-editor">Editor</div>
@@ -118,26 +162,30 @@
     <div class="tab" id="tab-beautify">JSON beautify</div>
     <div class="tab" id="tab-about">About</div>
   </div>
-  <div class="editor-container active" id="tab-editor">
+  <div class="editor-container active" id="editor-container">
     <div id="line-numbers"></div>
     <textarea id="editor" placeholder="Start typing here..."></textarea>
     <button id="save-button">Save</button>
-  </div id="epoch-container">
   </div>
-  <!-- <div class="epoch-converter" id="epoch-converter">
+  <div class="epoch-converter" id="epoch-container">
     <label for="epoch">Enter Epoch Time:</label>
     <input type="number" id="epoch-input" placeholder="Enter epoch time">
-    <button id="convert-to-datetime" onclick="convertToDateTime()">Convert to Datetime</button>
-    <p id="datetime-output"></p>
+    <button id="convert-to-datetime">Convert to Datetime</button>
+    <p id="epoch-output"></p>
 
     <label for="datetime">Enter Datetime:</label>
     <input type="datetime-local" id="datetime-input">
-    <button id="convert-to-epoch" onclick="convertToEpoch">Convert to Epoch</button>
-    <p id="epoch-output"></p>
+    <button id="convert-to-epoch">Convert to Epoch</button>
+    <p id="datetime-output"></p>
   </div>
-  </div>
-  <div> -->
+  <div class="json-beautify" id="beautify-container">
+    <label for="json-input">Enter JSON:</label>
+    <textarea id="json-input" placeholder="Enter JSON here..."></textarea>
+    <button id="beautify-button">Beautify JSON</button>
+    <label for="json-output">Beautified JSON:</label>
+    <textarea id="json-output" readonly></textarea>
   </div>
   <script src="newtab.js"></script>
 </body>
+
 </html>

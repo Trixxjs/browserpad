@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var editor = document.getElementById('editor');
   var lineNumbers = document.getElementById('line-numbers');
   var saveButton = document.getElementById('save-button');
+  var convertToDatetimeButton = document.getElementById('convert-to-datetime');
+  var converToEpochButton = document.getElementById('convert-to-epoch');
 
     // Tabs
     var editorTab = document.getElementById('tab-editor');
@@ -11,17 +13,30 @@ document.addEventListener('DOMContentLoaded', function() {
     var aboutTab = document.getElementById('tab-about');
     
     var editorContainer = document.getElementById('editor-container');
-    var epochContainer = document.getElementById('settings-container');
+    var epochContainer = document.getElementById('epoch-container');
     var diffContainer = document.getElementById('diff-container');
     var beautifyContainer = document.getElementById('beautify-container');
     var aboutContainer = document.getElementById('about-container');
+
+    editorContainer.classList.add('active');
   
     function switchTab(activeTab, activeContainer) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.content-pane').forEach(pane => pane.style.display = 'none');
+      // document.querySelectorAll('.content-pane').forEach(pane => pane.style.display = 'none');
+      document.querySelectorAll('.editor-container').forEach(element => {
+        element.style.display = 'none';
+      });
+      document.querySelectorAll('.epoch-converter').forEach(element => {
+        element.style.display = 'none';
+      });      
+      document.querySelectorAll('.json-beautify').forEach(element => {
+        element.style.display = 'none';
+      });   
       
       activeTab.classList.add('active');
-      activeContainer.style.display = 'block';
+      activeContainer ===  editorContainer ? activeContainer.style.display = 'flex' : activeContainer.style.display = 'block' ;
+      console.log(activeTab.classList);
+      console.log(activeContainer.style);
     }
   
     editorTab.addEventListener('click', function() {
@@ -136,6 +151,24 @@ function convertToEpoch() {
   const epoch = Math.floor(date.getTime() / 1000);
   document.getElementById('datetime-output').innerText = epoch;
 }
+
+convertToDatetimeButton.addEventListener('click', convertToDateTime);
+converToEpochButton.addEventListener('click', convertToEpoch);
+
+// JSON beautify functionality
+document.getElementById('beautify-button').addEventListener('click', function() {
+  const jsonInput = document.getElementById('json-input').value;
+  try {
+    const parsedJson = JSON.parse(jsonInput);
+    const beautifiedJson = JSON.stringify(parsedJson, null, 2);
+    console.log(beautifiedJson);
+    document.getElementById('json-output').value = beautifiedJson;
+  } catch (e) {
+    document.getElementById('json-output').value = 'Invalid JSON';
+  }
 });
+
+});
+
 
 
